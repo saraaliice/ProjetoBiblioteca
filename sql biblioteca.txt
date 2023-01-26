@@ -1,0 +1,98 @@
+ --Criar tabela TBObra
+ CREATE TABLE TBObra
+ (
+	CodObra	        INT NOT NULL,
+	Titulo	        varchar(50) NOT NULL,
+	AutorPrincipal	varchar(50) NOT NULL,
+	SituacaoObra	    INT NOT NULL,
+	TipoObra	        INT NOT NULL,
+	CodEditora	    INT NOT NULL,
+	FOREIGN KEY(CodEditora) REFERENCES TBEditora(CodEditora),
+	PRIMARY KEY(CodObra)
+);
+---------------------------------------------
+--Criar Tabela TBEditora
+CREATE TABLE TBEditora 
+(
+	CodEditora	INT NOT NULL,
+	NomeEditora	varchar(50) NOT NULL,
+	Cidade	varchar(50) NOT NULL,
+	PRIMARY KEY(CodEditora)
+);
+---------------------------------------------
+--Criar tabela TBUsuario
+CREATE TABLE TBUsuario 
+(
+	CodUsuario	INT NOT NULL,
+	NomeUsuario	varchar(50) NOT NULL,
+	Logradouro	varchar(50) NOT NULL,
+	Numero	INT NOT NULL,
+	Complemento	varchar(20) NOT NULL,
+	Bairro	varchar(30) NOT NULL,
+	Cidade	varchar(30) NOT NULL,
+	UF	varchar(2) NOT NULL,
+	CEP	varchar(10) NOT NULL,
+	Telefone	varchar(15) NOT NULL,
+	CPF	varchar(20) NOT NULL,
+	PRIMARY KEY(CodUsuario)
+);
+---------------------------------------------
+--Criar Tabela TBEmprestimo
+CREATE TABLE TBEmprestimo 
+(
+	CodEmprestimo	INT NOT NULL,
+	CodObra	INT NOT NULL,
+	CodUsuario	INT NOT NULL,
+	DataEmprestimo	Data NOT NULL,
+	HorarioEmprestimo	Time NOT NULL,
+	DataPrevistaRetorno	Data NOT NULL,
+	MatriculaFuncionario	INT NOT NULL,
+	FOREIGN KEY(CodObra) REFERENCES TBObra(CodObra),
+	FOREIGN KEY(CodUsuario) REFERENCES TBUsuario(CodUsuario),
+	FOREIGN KEY(MatriculaFuncionario) REFERENCES TBFuncionario(Matricula),
+	PRIMARY KEY(CodEmprestimo)
+);
+---------------------------------------------
+--Criar Tabela TBDevolucao
+CREATE TABLE TBDevolucao 
+(
+	CodEmprestimo	INT NOT NULL,
+	DataDevolucao	Data NOT NULL,
+	HorarioDevolucao	Time NOT NULL,
+	MatriculaFuncionario	INT NOT NULL,
+	PRIMARY KEY(CodEmprestimo),
+	FOREIGN KEY(MatriculaFuncionario) REFERENCES TBFuncionario(Matricula),
+	FOREIGN KEY(CodEmprestimo) REFERENCES TBEmprestimo(CodEmprestimo)
+);
+----------------------------------------------
+--Criar Tabela TBFuncionario
+CREATE TABLE TBFuncionario (
+	Matricula	INT NOT NULL,
+	NomeFuncionario	varchar(50) NOT NULL,
+	CodDepartamento	INT NOT NULL,
+	FOREIGN KEY(CodDepartamento) REFERENCES TBDepartamento(CodDepartamento),
+	PRIMARY KEY(Matricula)
+);
+----------------------------------------------
+--Criar Tabela TBDepartamento
+CREATE TABLE TBDepartamento
+(
+	CodDepartamento	INT NOT NULL,
+	NomeDepartamento	varchar(50) NOT NULL,
+	MatriculaChefe	INT NOT NULL,
+	PRIMARY KEY(CodDepartamento)
+);
+---------------------------------------------
+--Criar Tabela TBReserva
+CREATE TABLE TBReserva 
+(
+	CodReserva	INT NOT NULL,
+	CodUsuario	INT NOT NULL,
+	CodObra	INT NOT NULL,
+	DataReserva	Data NOT NULL,
+	HorarioReserva	Time NOT NULL,
+	DataRetirada	Data NOT NULL,
+	PRIMARY KEY(CodReserva),
+	FOREIGN KEY(CodObra) REFERENCES TBObra(CodObra),
+	FOREIGN KEY(CodUsuario) REFERENCES TBUsuario(CodUsuario)
+);
